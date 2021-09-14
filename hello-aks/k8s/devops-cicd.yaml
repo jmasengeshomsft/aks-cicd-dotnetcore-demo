@@ -89,12 +89,12 @@ stages:
             displayName: Login to ACR
             inputs:
               command: login
-              containerRegistry: $(acr-connection)
+              containerRegistry: privatek8sjmacr0002
           - task: Docker@2
             displayName: Build and Push
             inputs:
               command: buildAndPush
-              containerRegistry: $(acr-connection)
+              containerRegistry: privatek8sjmacr0002
               repository: $(imageName)
               # buildContext: '.'
               Dockerfile: Dockerfile
