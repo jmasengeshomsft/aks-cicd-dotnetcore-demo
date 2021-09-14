@@ -20,13 +20,10 @@ variables:
     value: "Release"
   - name : NugetSecurityAnalysisWarningLevel
     value : none
-  # - group: "nonehoplatform-dev"
 
 stages:
 - stage: BuildStage
   displayName: Build
-  # variables:
-  # - group: "nonehoplatform-dev"
 
   jobs:
   # Main build job 
@@ -53,17 +50,6 @@ stages:
         projects: '**/*.csproj'
         feedsToUse: 'config'
       displayName: 'Build the solution'
-  # # Test runs and publishing 
-  #   - task: DotNetCoreCLI@2
-  #     inputs:
-  #       command: test
-  #       projects: '**/*.UnitTests.csproj'
-  #       arguments: '--configuration $(buildConfiguration)'
-  #       publishTestResults: true
-  #     displayName: 'Run Tests'
-  #     continueOnError: false
-  #     enabled: true
-  #Run Black Duck Scan
   
 #   #Publish artifacts for release
   - job: BuildArtifacts 
@@ -90,12 +76,10 @@ stages:
   displayName: Deploy to Dev
   pool: 'default'
   variables:
-    - group: "network-rules-app-dev"
+    - group: "hello-aks-demo"
   jobs:
   - deployment: DeployDev
     environment: dev
-    # variables:
-    # - group: "nonehoplatform-dev"
     strategy:
       runOnce:
         deploy:
@@ -105,12 +89,12 @@ stages:
             displayName: Login to ACR
             inputs:
               command: login
-              containerRegistry: privatek8sjmacr002
+              containerRegistry: $(acr-connection)
           - task: Docker@2
             displayName: Build and Push
             inputs:
               command: buildAndPush
-              containerRegistry: privatek8sjmacr002
+              containerRegistry: $(acr-connection)
               repository: $(imageName)
               # buildContext: '.'
               Dockerfile: Dockerfile

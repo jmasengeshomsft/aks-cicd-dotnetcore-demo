@@ -1,26 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: #{aksResourcePrefix}#-demo-app-deployment
+  name: demo-app-deployment
   labels:
-    app: #{aksResourcePrefix}#-demo-app
-    aadpodidbinding: netrulz-pod-id
-    client: #{aksResourcePrefix}#
+    app: demo-app
+    # aadpodidbinding: netrulz-pod-id
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: #{aksResourcePrefix}#-demo-app
-      client: #{aksResourcePrefix}#
+      app: demo-app
   template:
     metadata:
       labels:
-        app: #{aksResourcePrefix}#-demo-app
-        aadpodidbinding: netrulz-pod-id
-        client: #{aksResourcePrefix}#
+        app: demo-app
+        # aadpodidbinding: netrulz-pod-id
     spec:
       containers:
-      - name: network-rules-app
+      - name: demo-app
         image: #{azureContainerRegistry}#/#{imageName}#:#{Build.BuildId}#
         resources:
           requests:
@@ -33,24 +30,24 @@ spec:
         - containerPort: 80
         readinessProbe:
           httpGet: 
-            path: /nsg
+            path: /weatherforecast
             port: 80
           initialDelaySeconds: 15
         livenessProbe:
           httpGet:
-            path: /nsg
+            path: /weatherforecast
             port: 80
           initialDelaySeconds: 15
-        volumeMounts:
-        - mountPath: "/mnt/azure"
-          name: jm-storage 
+        # volumeMounts:
+        # - mountPath: "/mnt/azure"
+        #   name: jm-storage 
         env:
-          - name: cosmosDbKey 
+          - name: CONFIG_EXAMPLE 
             valueFrom:
               configMapKeyRef:
-                name: #{aksResourcePrefix}#-demo-app-configmap           
-                key: cosmosDbKey   
-      volumes:
-        - name: jm-storage
-          persistentVolumeClaim:
-            claimName: #{aksResourcePrefix}#-demo-app-pvc
+                name: demo-app-configmap           
+                key: configKey   
+      # volumes:
+      #   - name: jm-storage
+      #     persistentVolumeClaim:
+      #       claimName: #{aksResourcePrefix}#-demo-app-pvc

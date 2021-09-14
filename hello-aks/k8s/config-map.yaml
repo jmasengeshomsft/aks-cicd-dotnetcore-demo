@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: #{aksResourcePrefix}#-demo-app-configmap
+  name: demo-app-configmap
 data:
   # property-like keys; each key maps to a simple value
-  cosmosDbKey: "some value"
+  configKey: "some value"
