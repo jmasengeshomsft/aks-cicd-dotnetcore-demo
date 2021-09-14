@@ -97,7 +97,7 @@ stages:
               containerRegistry: privatek8sjmacr002
               repository: $(imageName)
               # buildContext: '.'
-              Dockerfile: Dockerfile
+              Dockerfile: 'hello-aks/Dockerfile'
               tags: $(Build.BuildId)
           - download: current
             artifact: drop
