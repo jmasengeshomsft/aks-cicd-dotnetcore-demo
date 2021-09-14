@@ -1,0 +1,219 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# yaml file for develop/master branches build
+trigger: none
+#   branches:
+#     include:
+#     - main
+
+# pr: none 
+
+pool: 'default'
+variables:
+  - name: solution
+    value: '**/*.sln'
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: "Release"
+  - name : NugetSecurityAnalysisWarningLevel
+    value : none
+  # - group: "nonehoplatform-dev"
+
+stages:
+- stage: BuildStage
+  displayName: Build
+  # variables:
+  # - group: "nonehoplatform-dev"
+
+  jobs:
+  # Main build job 
+  - job: Build
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: sdk
+        version: 3.1.x
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+      displayName: 'Install dotnet core'
+  
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        feedsToUse: 'config'
+        nugetConfigPath: 'nuget.config'
+        projects: '**/*.csproj'
+      displayName: 'Dotnet Restore'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        feedsToUse: 'config'
+      displayName: 'Build the solution'
+  # # Test runs and publishing 
+  #   - task: DotNetCoreCLI@2
+  #     inputs:
+  #       command: test
+  #       projects: '**/*.UnitTests.csproj'
+  #       arguments: '--configuration $(buildConfiguration)'
+  #       publishTestResults: true
+  #     displayName: 'Run Tests'
+  #     continueOnError: false
+  #     enabled: true
+  #Run Black Duck Scan
+  
+#   #Publish artifacts for release
+  - job: BuildArtifacts 
+    dependsOn:
+    - Build
+    steps:
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: 
+        Contents: 'k8s/**'
+        TargetFolder: "$(Build.ArtifactStagingDirectory)"
+        flattenFolder: false
+      displayName: 'Copy k8s yaml files'
+
+#   #copy files under drop
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        pathToPublish: "$(Build.ArtifactStagingDirectory)"
+        artifactName: drop
+
+# # Pod Deployment 
+- stage: DeployDevStage
+  displayName: Deploy to Dev
+  pool: 'default'
+  variables:
+    - group: "network-rules-app-dev"
+  jobs:
+  - deployment: DeployDev
+    environment: dev
+    # variables:
+    # - group: "nonehoplatform-dev"
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          #Build and Push Image
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: privatek8sjmacr002
+          - task: Docker@2
+            displayName: Build and Push
+            inputs:
+              command: buildAndPush
+              containerRegistry: privatek8sjmacr002
+              repository: $(imageName)
+              # buildContext: '.'
+              Dockerfile: Dockerfile
+              tags: $(Build.BuildId)
+          - download: current
+            artifact: drop
+          #replace local vars, group variables into yaml files 
+          - task: replacetokens@3
+            displayName: 'Replace tokens in **/*.yaml'
+            inputs:
+              rootDirectory: '$(Pipeline.Workspace)/drop'
+              targetFiles: '**/*.yaml,**/*.yml'
+              verbosity: detailed  
+
+          - task: Kubernetes@1
+            displayName: Create Config Map
+            inputs:
+              connectionType: Azure Resource Manager
+              azureSubscriptionEndpoint:  $(azureSubscriptionEndpoint)#
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+              namespace: $(namespace)
+              useClusterAdmin: $(useClusterAdmin)
+              command: apply
+              useConfigurationFile: true
+              configuration: '$(Pipeline.Workspace)/drop/k8s/config-map.yaml' 
+
+          - task: Kubernetes@1
+            displayName: Deployment
+            inputs:
+              connectionType: Azure Resource Manager
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)#
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+              namespace: $(namespace)
+              useClusterAdmin: $(useClusterAdmin)
+              command: apply
+              useConfigurationFile: true
+              configuration: '$(Pipeline.Workspace)/drop/k8s/deployment.yaml'      
+ 
+          - task: Kubernetes@1
+            displayName: Service
+            inputs:
+              connectionType: Azure Resource Manager
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+              namespace: $(namespace)
+              useClusterAdmin: $(useClusterAdmin)
+              command: apply
+              useConfigurationFile: true
+              configuration: '$(Pipeline.Workspace)/drop/k8s/service.yaml'        
+          
+          - task: Kubernetes@1
+            displayName: Network Policy
+            inputs:
+              connectionType: Azure Resource Manager
+              azureSubscriptionEndpoint:  $(azureSubscriptionEndpoint)
+              azureResourceGroup: $(azureResourceGroup)
+              kubernetesCluster: $(kubernetesCluster)
+              namespace: $(namespace)
+              useClusterAdmin: $(useClusterAdmin)
+              command: apply
+              useConfigurationFile: true
+              configuration: '$(Pipeline.Workspace)/drop/k8s/network-policy.yaml'      
+
+# #   #check the deployment roll out
+#   - job: CheckDeploymentRollOut
+#     dependsOn: DeployDev
+#     condition: succeeded()
+#     pool: 'core-entauto-linux-default'
+#     variables:
+#       - group: "nonehoplatform-dev"
+#     steps:    
+#     - task: Kubernetes@1
+#       displayName: Rollout Status
+#       inputs:
+#         connectionType: Azure Resource Manager
+#         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+#         azureResourceGroup: $(azureResourceGroup)
+#         kubernetesCluster: $(kubernetesCluster)
+#         namespace: $(namespace)
+#         useClusterAdmin: $(useClusterAdmin)
+#         command: rollout  
+#         arguments: status deployment noneho-nonehoplatform
+
+#         #roll back on failure
+#   - job: RollBackDeploymentIfFailed
+#     dependsOn: CheckDeploymentRollOut
+#     condition: failed()
+#     pool: 'core-entauto-linux-default'
+#     variables:
+#       - group: "nonehoplatform-dev"
+#     steps:  
+#     - task: Kubernetes@1
+#       displayName: Rollout Status
+#       inputs:
+#         connectionType: Azure Resource Manager
+#         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+#         azureResourceGroup: $(azureResourceGroup)
+#         kubernetesCluster: $(kubernetesCluster)
+#         namespace: $(namespace)
+#         useClusterAdmin: $(useClusterAdmin)
+#         command: rollout
+#         arguments: undo deployment noneho-nonehoplatform   
+

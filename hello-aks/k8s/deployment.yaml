@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #{aksResourcePrefix}#-demo-app-deployment
+  labels:
+    app: #{aksResourcePrefix}#-demo-app
+    aadpodidbinding: netrulz-pod-id
+    client: #{aksResourcePrefix}#
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: #{aksResourcePrefix}#-demo-app
+      client: #{aksResourcePrefix}#
+  template:
+    metadata:
+      labels:
+        app: #{aksResourcePrefix}#-demo-app
+        aadpodidbinding: netrulz-pod-id
+        client: #{aksResourcePrefix}#
+    spec:
+      containers:
+      - name: network-rules-app
+        image: #{azureContainerRegistry}#/#{imageName}#:#{Build.BuildId}#
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi    
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet: 
+            path: /nsg
+            port: 80
+          initialDelaySeconds: 15
+        livenessProbe:
+          httpGet:
+            path: /nsg
+            port: 80
+          initialDelaySeconds: 15
+        volumeMounts:
+        - mountPath: "/mnt/azure"
+          name: jm-storage 
+        env:
+          - name: cosmosDbKey 
+            valueFrom:
+              configMapKeyRef:
+                name: #{aksResourcePrefix}#-demo-app-configmap           
+                key: cosmosDbKey   
+      volumes:
+        - name: jm-storage
+          persistentVolumeClaim:
+            claimName: #{aksResourcePrefix}#-demo-app-pvc
