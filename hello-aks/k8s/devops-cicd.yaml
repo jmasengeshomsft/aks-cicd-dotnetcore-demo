@@ -40,7 +40,7 @@ stages:
       inputs:
         command: 'restore'
         feedsToUse: 'config'
-        nugetConfigPath: './nuget.config'
+        nugetConfigPath: 'hello-aks/nuget.config'
         projects: '**/*.csproj'
       displayName: 'Dotnet Restore'
 
@@ -120,7 +120,7 @@ stages:
               useClusterAdmin: $(useClusterAdmin)
               command: apply
               useConfigurationFile: true
-              configuration: '$(Pipeline.Workspace)/drop/k8s/config-map.yaml' 
+              configuration: '$(Pipeline.Workspace)/drop/hello-aks/k8s/config-map.yaml' 
 
           - task: Kubernetes@1
             displayName: Deployment
@@ -133,7 +133,7 @@ stages:
               useClusterAdmin: $(useClusterAdmin)
               command: apply
               useConfigurationFile: true
-              configuration: '$(Pipeline.Workspace)/drop/k8s/deployment.yaml'      
+              configuration: '$(Pipeline.Workspace)/drop/hello-aks/k8s/deployment.yaml'      
  
           - task: Kubernetes@1
             displayName: Service
@@ -146,7 +146,7 @@ stages:
               useClusterAdmin: $(useClusterAdmin)
               command: apply
               useConfigurationFile: true
-              configuration: '$(Pipeline.Workspace)/drop/k8s/service.yaml'        
+              configuration: '$(Pipeline.Workspace)/drop/hello-aks/k8s/service.yaml'        
           
           - task: Kubernetes@1
             displayName: Network Policy
@@ -159,7 +159,7 @@ stages:
               useClusterAdmin: $(useClusterAdmin)
               command: apply
               useConfigurationFile: true
-              configuration: '$(Pipeline.Workspace)/drop/k8s/network-policy.yaml'      
+              configuration: '$(Pipeline.Workspace)/drop/hello-aks/k8s/network-policy.yaml'      
 
 # #   #check the deployment roll out
 #   - job: CheckDeploymentRollOut
