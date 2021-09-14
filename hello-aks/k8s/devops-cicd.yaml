@@ -94,7 +94,7 @@ stages:
             displayName: Build and Push
             inputs:
               command: buildAndPush
-              containerRegistry: privatek8sjmacr0002
+              containerRegistry: privatek8sjmacr002
               repository: $(imageName)
               # buildContext: '.'
               Dockerfile: Dockerfile
