@@ -59,7 +59,7 @@ stages:
     - task: CopyFiles@2
       inputs:
         SourceFolder: 
-        Contents: 'k8s/**'
+        Contents: 'hello-aks/k8s/**'
         TargetFolder: "$(Build.ArtifactStagingDirectory)"
         flattenFolder: false
       displayName: 'Copy k8s yaml files'
