@@ -113,7 +113,7 @@ stages:
             displayName: Create Config Map
             inputs:
               connectionType: Azure Resource Manager
-              azureSubscriptionEndpoint:  $(azureSubscriptionEndpoint)
+              azureSubscriptionEndpoint:  'jmasengesho-internal-subscription' #$(azureSubscriptionEndpoint)
               azureResourceGroup: $(azureResourceGroup)
               kubernetesCluster: $(kubernetesCluster)
               namespace: $(namespace)
@@ -126,7 +126,7 @@ stages:
             displayName: Deployment
             inputs:
               connectionType: Azure Resource Manager
-              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureSubscriptionEndpoint: 'jmasengesho-internal-subscription' #$(azureSubscriptionEndpoint)
               azureResourceGroup: $(azureResourceGroup)
               kubernetesCluster: $(kubernetesCluster)
               namespace: $(namespace)
@@ -139,7 +139,7 @@ stages:
             displayName: Service
             inputs:
               connectionType: Azure Resource Manager
-              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+              azureSubscriptionEndpoint: 'jmasengesho-internal-subscription' #$(azureSubscriptionEndpoint)
               azureResourceGroup: $(azureResourceGroup)
               kubernetesCluster: $(kubernetesCluster)
               namespace: $(namespace)
@@ -152,7 +152,7 @@ stages:
             displayName: Network Policy
             inputs:
               connectionType: Azure Resource Manager
-              azureSubscriptionEndpoint:  $(azureSubscriptionEndpoint)
+              azureSubscriptionEndpoint:  'jmasengesho-internal-subscription' #$(azureSubscriptionEndpoint)
               azureResourceGroup: $(azureResourceGroup)
               kubernetesCluster: $(kubernetesCluster)
               namespace: $(namespace)
