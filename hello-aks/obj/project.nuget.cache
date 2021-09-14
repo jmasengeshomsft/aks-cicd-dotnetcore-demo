@@ -1,15 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "O8GCxdgUnJ2lMZdtrDlRJ403O0ToiLVdCHfLgI/1HtouEaYzsoeAXlM6qWy52YYtAuookqy+CSiN4Z5srGKHvQ==",
+  "dgSpecHash": "12UlP9K6unW3iLeNk51PN+Puw8DFDw1ul3Kg/GpHHW6BcqtNeqPZ95gXZRfpkEGBi4/qGFfY6d/JT7Wv8hMOWQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jmasengesho\\Documents\\workspace\\Boilerplates\\aks-dotnet-core-cicd\\hello-aks\\hello-aks.csproj",
+  "projectFilePath": "/workspaces/aks-cicd-dotnetcore-demo/hello-aks/hello-aks.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\jmasengesho\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
-    "C:\\Users\\jmasengesho\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
-    "C:\\Users\\jmasengesho\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
-    "C:\\Users\\jmasengesho\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
-    "C:\\Users\\jmasengesho\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
-    "C:\\Users\\jmasengesho\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\5.6.3\\swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
+    "/var/nuget/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "/var/nuget/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/var/nuget/swashbuckle.aspnetcore/5.6.3/swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
+    "/var/nuget/swashbuckle.aspnetcore.swagger/5.6.3/swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
+    "/var/nuget/swashbuckle.aspnetcore.swaggergen/5.6.3/swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
+    "/var/nuget/swashbuckle.aspnetcore.swaggerui/5.6.3/swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512",
+    "/var/nuget/microsoft.netcore.app.ref/3.1.0/microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
+    "/var/nuget/microsoft.aspnetcore.app.ref/3.1.10/microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512",
+    "/var/nuget/microsoft.netcore.app.host.linux-x64/3.1.18/microsoft.netcore.app.host.linux-x64.3.1.18.nupkg.sha512"
   ],
   "logs": []
 }
