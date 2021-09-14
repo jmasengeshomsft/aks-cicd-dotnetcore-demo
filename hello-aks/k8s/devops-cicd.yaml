@@ -89,7 +89,7 @@ stages:
             displayName: Login to ACR
             inputs:
               command: login
-              containerRegistry: privatek8sjmacr0002
+              containerRegistry: privatek8sjmacr002
           - task: Docker@2
             displayName: Build and Push
             inputs:
@@ -113,7 +113,7 @@ stages:
             displayName: Create Config Map
             inputs:
               connectionType: Azure Resource Manager
-              azureSubscriptionEndpoint:  $(azureSubscriptionEndpoint)#
+              azureSubscriptionEndpoint:  $(azureSubscriptionEndpoint)
               azureResourceGroup: $(azureResourceGroup)
               kubernetesCluster: $(kubernetesCluster)
               namespace: $(namespace)
@@ -126,7 +126,7 @@ stages:
             displayName: Deployment
             inputs:
               connectionType: Azure Resource Manager
-              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)#
+              azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
               azureResourceGroup: $(azureResourceGroup)
               kubernetesCluster: $(kubernetesCluster)
               namespace: $(namespace)
