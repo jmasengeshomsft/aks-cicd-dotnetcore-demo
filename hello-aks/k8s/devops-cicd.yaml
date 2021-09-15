@@ -24,6 +24,8 @@ variables:
     value : hello-aks
   - name: azureSubscriptionEndpoint
     value : jmasengesho-internal-subscription
+  - name: azureContainerRegistry
+    value: privatek8sjmacr0002.azurecr.io
   - name: azureResourceGroup
     value: privatek8s-jm-private-cluster001-rg
   - name : kubernetesCluster
