@@ -162,42 +162,36 @@ stages:
               configuration: '$(Pipeline.Workspace)/drop/hello-aks/k8s/network-policy.yaml'      
 
 # #   #check the deployment roll out
-#   - job: CheckDeploymentRollOut
-#     dependsOn: DeployDev
-#     condition: succeeded()
-#     pool: 'core-entauto-linux-default'
-#     variables:
-#       - group: "nonehoplatform-dev"
-#     steps:    
-#     - task: Kubernetes@1
-#       displayName: Rollout Status
-#       inputs:
-#         connectionType: Azure Resource Manager
-#         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-#         azureResourceGroup: $(azureResourceGroup)
-#         kubernetesCluster: $(kubernetesCluster)
-#         namespace: $(namespace)
-#         useClusterAdmin: $(useClusterAdmin)
-#         command: rollout  
-#         arguments: status deployment noneho-nonehoplatform
+  - job: CheckDeploymentRollOut
+    dependsOn: DeployDev
+    condition: succeeded()
+    steps:    
+    - task: Kubernetes@1
+      displayName: Rollout Status
+      inputs:
+        connectionType: Azure Resource Manager
+        azureSubscriptionEndpoint: $'jmasengesho-internal-subscription' #$(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)
+        namespace: $(namespace)
+        useClusterAdmin: $(useClusterAdmin)
+        command: rollout  
+        arguments: status deployment demo-app-deployment
 
-#         #roll back on failure
-#   - job: RollBackDeploymentIfFailed
-#     dependsOn: CheckDeploymentRollOut
-#     condition: failed()
-#     pool: 'core-entauto-linux-default'
-#     variables:
-#       - group: "nonehoplatform-dev"
-#     steps:  
-#     - task: Kubernetes@1
-#       displayName: Rollout Status
-#       inputs:
-#         connectionType: Azure Resource Manager
-#         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-#         azureResourceGroup: $(azureResourceGroup)
-#         kubernetesCluster: $(kubernetesCluster)
-#         namespace: $(namespace)
-#         useClusterAdmin: $(useClusterAdmin)
-#         command: rollout
-#         arguments: undo deployment noneho-nonehoplatform   
+        #roll back on failure
+  - job: RollBackDeploymentIfFailed
+    dependsOn: CheckDeploymentRollOut
+    condition: failed()
+    steps:  
+    - task: Kubernetes@1
+      displayName: Rollout Status
+      inputs:
+        connectionType: Azure Resource Manager
+        azureSubscriptionEndpoint: 'jmasengesho-internal-subscription' #$(azureSubscriptionEndpoint)
+        azureResourceGroup: $(azureResourceGroup)
+        kubernetesCluster: $(kubernetesCluster)
+        namespace: $(namespace)
+        useClusterAdmin: $(useClusterAdmin)
+        command: rollout
+        arguments: undo deployment demo-app-deployment   
 
