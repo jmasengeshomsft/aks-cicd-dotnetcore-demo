@@ -37,12 +37,9 @@ variables:
   - name: acr_connection
     value: privatek8sjmacr002
 
-
-
 stages:
 - stage: BuildStage
   displayName: Build
-
   jobs:
   # Main build job 
   - job: Build

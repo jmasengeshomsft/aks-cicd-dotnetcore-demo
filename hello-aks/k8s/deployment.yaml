@@ -4,7 +4,7 @@ metadata:
   name: demo-app-deployment
   labels:
     app: demo-app
-    # aadpodidbinding: netrulz-pod-id
+    # aadpodidbinding: <value>
 spec:
   replicas: 2
   selector:
@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: demo-app
-        # aadpodidbinding: netrulz-pod-id
+        # aadpodidbinding: <value>
     spec:
       containers:
       - name: demo-app
@@ -38,16 +38,9 @@ spec:
             path: /weatherforecast
             port: 80
           initialDelaySeconds: 15
-        # volumeMounts:
-        # - mountPath: "/mnt/azure"
-        #   name: jm-storage 
         env:
           - name: CONFIG_EXAMPLE 
             valueFrom:
               configMapKeyRef:
                 name: demo-app-configmap           
                 key: configKey   
-      # volumes:
-      #   - name: jm-storage
-      #     persistentVolumeClaim:
-      #       claimName: #{aksResourcePrefix}#-demo-app-pvc
