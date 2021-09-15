@@ -170,7 +170,7 @@ stages:
       displayName: Rollout Status
       inputs:
         connectionType: Azure Resource Manager
-        azureSubscriptionEndpoint: $'jmasengesho-internal-subscription' #$(azureSubscriptionEndpoint)
+        azureSubscriptionEndpoint: 'jmasengesho-internal-subscription' #$(azureSubscriptionEndpoint)
         azureResourceGroup: $(azureResourceGroup)
         kubernetesCluster: $(kubernetesCluster)
         namespace: $(namespace)
