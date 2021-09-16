@@ -21,21 +21,21 @@ variables:
   - name : NugetSecurityAnalysisWarningLevel
     value : none
   - name: imageName
-    value : hello-aks
+    value : <acr image name/repository>
   - name: azureSubscriptionEndpoint
-    value : jmasengesho-internal-subscription
+    value : <azure subscription service connection>
   - name: azureContainerRegistry
-    value: privatek8sjmacr0002.azurecr.io
+    value: <acr instance url>
   - name: azureResourceGroup
-    value: privatek8s-jm-private-cluster001-rg
+    value: <aks cluster resource group>
   - name : kubernetesCluster
-    value: privatek8s-dev-cluster0003
+    value: <aks cluster name>
   - name: namespace
-    value: demo-app
+    value: <pod namespace, must be created before running pipeline>
   - name: useClusterAdmin
-    value: true
+    value: <set to true if using the user access key as password>
   - name: acr_connection
-    value: privatek8sjmacr002
+    value: <acr service connection with push/pull>
 
 stages:
 - stage: BuildStage
@@ -90,8 +90,6 @@ stages:
 - stage: DeployDevStage
   displayName: Deploy to Dev
   pool: 'default'
-  # variables:
-  #   - group: "hello-aks-demo"
   jobs:
   - deployment: DeployDev
     environment: dev
