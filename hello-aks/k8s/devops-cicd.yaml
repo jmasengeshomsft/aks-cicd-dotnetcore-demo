@@ -21,21 +21,21 @@ variables:
   - name : NugetSecurityAnalysisWarningLevel
     value : none
   - name: imageName
-    value : <acr image name/repository>
+    value : jm-dotnetcoreapidemo
   - name: azureSubscriptionEndpoint
-    value : <azure subscription service connection>
+    value : jmasengesho-internal-subscription
   - name: azureContainerRegistry
-    value: <acr instance url>
+    value: jmgitopsdemo.azurecr.io
   - name: azureResourceGroup
-    value: <aks cluster resource group>
+    value: gitOps-demo
   - name : kubernetesCluster
-    value: <aks cluster name>
+    value: gitOps-demo
   - name: namespace
-    value: <pod namespace, must be created before running pipeline>
+    value: demoapi
   - name: useClusterAdmin
-    value: <set to true if using the user access key as password>
+    value: true
   - name: acr_connection
-    value: <acr service connection with push/pull>
+    value: jmgitopsdemo
 
 stages:
 - stage: BuildStage
