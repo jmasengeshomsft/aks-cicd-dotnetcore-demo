@@ -109,7 +109,7 @@ stages:
               command: buildAndPush
               containerRegistry: $(acr_connection)
               repository: $(imageName)
-              # buildContext: '.'
+              buildContext: '.'
               Dockerfile: 'hello-aks/Dockerfile'
               tags: $(Build.BuildId)
           - download: current
