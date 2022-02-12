@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY *.csproj ./
+COPY hello-aks/*.csproj ./hello-aks/
 RUN dotnet restore
 
 # Copy everything else and build
