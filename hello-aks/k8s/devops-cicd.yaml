@@ -10,7 +10,7 @@ trigger:
 
 pr: none 
 
-pool: 'default'
+pool: 'Azure Pipelines'
 variables:
   - name: solution
     value: '**/*.sln'
@@ -89,7 +89,7 @@ stages:
 # # Pod Deployment 
 - stage: DeployDevStage
   displayName: Deploy to Dev
-  pool: 'default'
+  pool: 'Azure Pipelines'
   jobs:
   - deployment: DeployDev
     environment: dev
