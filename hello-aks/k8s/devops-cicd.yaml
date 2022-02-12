@@ -29,7 +29,7 @@ variables:
   - name: azureResourceGroup
     value: gitOps-demo
   - name : kubernetesCluster
-    value: gitOps-demo
+    value: jm-spark-gitops
   - name: namespace
     value: demoapi
   - name: useClusterAdmin
@@ -109,8 +109,8 @@ stages:
               command: buildAndPush
               containerRegistry: $(acr_connection)
               repository: $(imageName)
-              # buildContext: '.'
-              Dockerfile: 'Dockerfile'
+              buildContext: '.'
+              Dockerfile: 'hello-aks/Dockerfile'
               tags: $(Build.BuildId)
           - download: current
             artifact: drop
