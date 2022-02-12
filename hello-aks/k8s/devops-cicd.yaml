@@ -109,8 +109,8 @@ stages:
               command: buildAndPush
               containerRegistry: $(acr_connection)
               repository: $(imageName)
-              buildContext: '.'
-              Dockerfile: 'hello-aks/Dockerfile'
+              # buildContext: '.'
+              Dockerfile: 'Dockerfile'
               tags: $(Build.BuildId)
           - download: current
             artifact: drop
